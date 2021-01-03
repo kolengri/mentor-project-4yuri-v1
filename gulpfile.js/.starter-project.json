@@ -7,7 +7,7 @@
   },
   "html": {
     "run": true,
-    "pug": true,
+    "pug": false,
     "data": true,
     "inline": true,
     "src": "html",
