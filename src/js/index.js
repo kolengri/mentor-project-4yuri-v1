@@ -1,1 +1,1 @@
-require('./filmAutocomplete');
+import './filmAutocomplete';
