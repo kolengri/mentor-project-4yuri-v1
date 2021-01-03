@@ -1,5 +1,6 @@
-const $ = require("jquery");
-require("jquery-ui")
+const $ = require("jquery")
+
+require("jquery-ui/ui/widgets/autocomplete")
 
 const apiKey = "35c2658e0e706d145f4d4f7e995e368f"
 
@@ -17,7 +18,7 @@ $('#filmsList').autocomplete({
                 });
 
 
-                res(result,  function () {
+                res(result, function () {
                     console.log("Unable to load data");
                 })
             }
