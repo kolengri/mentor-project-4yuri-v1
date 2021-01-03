@@ -1,0 +1,19 @@
+{
+  "name": "mentor-project-4yuri-v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git+https://github.com/kolengri/mentor-project-4yuri-v1.git",
+  "author": "kolengri <kolenko@me.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kolengri/mentor-project-4yuri-v1/issues"
+  },
+  "homepage": "https://github.com/kolengri/mentor-project-4yuri-v1#readme",
+  "dependencies": {
+    "starter-project": "^2.2.13"
+  }
+}
