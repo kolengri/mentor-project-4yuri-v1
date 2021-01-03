@@ -13,7 +13,7 @@
     "src": "html",
     "dist": "",
     "minify": true,
-    "lint": true
+    "lint": false
   },
   "css": {
     "run": true,
@@ -23,7 +23,7 @@
     "minify": true,
     "autoprefix": true,
     "sourcemaps": true,
-    "lint": true
+    "lint": false
   },
   "js": {
     "run": true,
@@ -31,7 +31,7 @@
     "dist": "js",
     "uglify": true,
     "sourcemaps": true,
-    "lint": true
+    "lint": false
   },
   "gfx": {
     "run": true,
