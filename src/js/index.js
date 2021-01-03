@@ -1,3 +1,1 @@
-
-
-require('./filmAutocomplete')
+require('./filmAutocomplete');
