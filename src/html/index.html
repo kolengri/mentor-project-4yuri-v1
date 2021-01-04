@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="/js/index.min.js"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <link rel="stylesheet" href="/css/style.min.css" />
   </head>
   <body>
-    <div class="ui-widget">
-      <label for="filmsList">Films: </label>
-      <input id="filmsList" name="query" placeholder="start typing..." />
-      <button onclick="test()" type="button" name="button">CLICK</button>
+    <div class="main">
+      <div>
+        <span class="iconify" data-icon="gg:search" data-inline="false"></span>
+        <input id="filmsList" class="filmList__input" name="query" placeholder="start typing..." />
+      </div>
     </div>
   </body>
 </html>
