@@ -1,4 +1,4 @@
-# The project was created  to help https://github.com/Juris-coder with Javascript
+# The project was created  to help [Yuri|https://github.com/Juris-coder] with Javascript
 
 ## Start project
 Run
