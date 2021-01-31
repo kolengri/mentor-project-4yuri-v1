@@ -5,9 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="/js/index.min.js"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <link rel="stylesheet" href="/css/style.min.css" />
   </head>
   <body>
-    test
+    <div class="container">
+      <div class="container_input">
+        <span class="iconify" data-icon="gg:search" data-inline="false"></span>
+        <input id="filmsListInput" class="queryInput" name="query" placeholder="start typing...">
+        <div class="radio_div">
+          <div>
+            <label for="List">List</label>
+            <input id="radioList" type="radio" name="type" value="List">
+          </div>
+          <div>
+            <label for="Posters">Posters</label>
+            <input id="radioPosters" type="radio" name="type" value="Posters" checked>
+          </div>
+        </div>
+        <div id="parentDiv"></div>
+      </div>
+    </div>
+    </div>
+    <div class="image_container"><img src="logo.png" alt="logo"></div>
   </body>
 </html>

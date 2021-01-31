@@ -17,8 +17,8 @@ if (!global.config.css.sourcemaps) {
   sourcemaps.write = () => true;
 }
 
-const thisEslintConfig = (global.config.js.lint)
-  ? ({ ...jsConfig.eslintConfig, configFile: helpers.parse(jsConfig.eslintConfig.configFile) })
+const thisEslintConfig = global.config.js.lint
+  ? { ...jsConfig.eslintConfig, configFile: helpers.parse(jsConfig.eslintConfig.configFile) }
   : {};
 
 if (!global.config.js.lint) {
@@ -27,7 +27,7 @@ if (!global.config.js.lint) {
   eslint.result = () => true;
 }
 
-webpackConfig.devtool = (global.config.js.sourcemaps) ? 'sourcemaps' : '';
+webpackConfig.devtool = global.config.js.sourcemaps ? 'sourcemaps' : '';
 
 // Will process JS files
 function jsStart() {
@@ -36,19 +36,26 @@ function jsStart() {
     .pipe(gulpif(global.config.js.lint, eslint(thisEslintConfig)))
     .pipe(gulpif(global.config.js.lint, eslint.format()))
     .pipe(gulpif(global.config.js.lint, eslint.failAfterError()))
-    .pipe(gulpif(global.config.js.lint, eslint.result((result) => {
-      console.log(`[JS] ESLint complete: ${result.filePath}`);
-      console.log(`[JS] Messages: ${result.messages.length}`);
-      console.warn(`[JS] Warnings: ${result.warningCount}`);
-      console.error(`[JS] Errors: ${result.errorCount}`);
-    })))
     .pipe(
-      gulpWebpack(webpackConfig),
-      webpack,
+      gulpif(
+        global.config.js.lint,
+        eslint.result(result => {
+          console.log(`[JS] ESLint complete: ${result.filePath}`);
+          console.log(`[JS] Messages: ${result.messages.length}`);
+          console.warn(`[JS] Warnings: ${result.warningCount}`);
+          console.error(`[JS] Errors: ${result.errorCount}`);
+        })
+      )
     )
+    .pipe(gulpWebpack(webpackConfig), webpack)
     .pipe(dest(helpers.trim(`${helpers.dist()}/${global.config.js.dist}`)))
     .pipe(gulpif(global.config.js.uglify, rename(jsConfig.renameConfig)))
-    .pipe(gulpif(global.config.js.sourcemaps, sourcemaps.write(helpers.trim(`${helpers.source()}/${global.config.js.dist}`))))
+    .pipe(
+      gulpif(
+        global.config.js.sourcemaps,
+        sourcemaps.write(helpers.trim(`${helpers.source()}/${global.config.js.dist}`))
+      )
+    )
     .pipe(dest(helpers.trim(`${helpers.dist()}/${global.config.js.dist}`)))
     .pipe(gulpif(global.config.sync.run, global.bs.stream()));
 }
@@ -62,7 +69,7 @@ function jsStartDev(cb) {
 }
 
 function jsStartProd(cb) {
-  webpackConfig.mode = (global.config.js.uglify) ? 'production' : 'development';
+  webpackConfig.mode = global.config.js.uglify ? 'production' : 'development';
 
   jsStart();
 
@@ -71,7 +78,12 @@ function jsStartProd(cb) {
 
 // When JS file is changed, it will process JS file, too
 function jsListen() {
-  return watch(helpers.trim(`${helpers.source()}/${global.config.js.src}/*.js`), global.config.watchConfig, jsStart, global.bs.reload);
+  return watch(
+    helpers.trim(`${helpers.source()}/${global.config.js.src}/*.js`),
+    global.config.watchConfig,
+    jsStart,
+    global.bs.reload
+  );
 }
 
 exports.js = {
