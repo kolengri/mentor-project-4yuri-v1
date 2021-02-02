@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable array-callback-return */
 /* eslint-disable spaced-comment */
 /* eslint-disable func-names */
@@ -12,90 +13,98 @@
 
 // import 'jquery-ui/ui/widgets/autocomplete';
 
+let typingTimer;
+let resultFunc;
+let currentFocus;
+const API_ENDPOINT = 'https://api.themoviedb.org/3/search/movie?api_key=';
+const API_KEY = '35c2658e0e706d145f4d4f7e995e368f';
+const IMAGE_PATH = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
+const NOT_FOUND_IMAGE_PATH = 'https://media.istockphoto.com/vectors/internet-error-page-not-found-in-vertical-orientation-for-mobile-a-vector-id1252582562?s=612x612';
+
 document.addEventListener('DOMContentLoaded', function () {
-  let typingTimer;
-  let resultFunc;
-  let currentFocus;
-  const apiKey = '35c2658e0e706d145f4d4f7e995e368f';
-  const val = document.getElementById('filmsListInput');
-  const parentDiv = document.getElementById('parentDiv');
+  const $filmsListInput = document.getElementById('filmsListInput');
+  const $filmsAutocompleteList = document.getElementById('filmsAutocompleteList');
 
   function closeAllLists(elmnt) {
-    const x = document.getElementsByClassName('autocomplete-items');
-    for (let i = 0; i < x.length; i++) {
-      if (elmnt !== x[i] && elmnt !== val) {
-        x[i].parentNode.removeChild(x[i]);
+    const $x = document.getElementsByClassName('autocompleteItems');
+    for (let i = 0; i < $x.length; i++) {
+      if (elmnt !== $x[i] && elmnt !== $filmsListInput) {
+        $x[i].parentNode.removeChild($x[i]);
       }
     }
   }
 
   function autocomplete() {
-    const radioList = document.getElementById('radioList');
-    const radioPosters = document.getElementById('radioPosters');
+    const $radioList = document.getElementById('radioList');
+    const $radioPosters = document.getElementById('radioPosters');
     closeAllLists();
-    if (!val.value) {
+    if (!$filmsListInput.value) {
       return false;
     }
     currentFocus = -1;
-    parentDiv.style.display = 'block';
-    const filmList = document.createElement('DIV');
-    filmList.setAttribute('id', 'autocomplete-list');
-    filmList.setAttribute('class', 'autocomplete-items');
-    parentDiv.appendChild(filmList);
+    $filmsAutocompleteList.style.display = 'block';
+    const $filmList = document.createElement('DIV');
+    $filmList.setAttribute('id', 'autocompleteList');
+    $filmList.setAttribute('class', 'autocompleteItems');
+    $filmsAutocompleteList.appendChild($filmList);
     if (resultFunc.length > 0) {
-      if (radioList.checked) {
+      if ($radioList.checked) {
         resultFunc.map(function (film) {
-          const listItem = document.createElement('DIV');
-          listItem.innerHTML = film.title + ' (' + film.vote_average.toFixed(1) + ')';
-          listItem.innerHTML += "<input type='hidden' value='" + film.title + ' (' + film.vote_average.toFixed(1) + ')' + "'>";
-          listItem.addEventListener('click', function () {
-            val.value = this.getElementsByTagName('input')[0].value;
+          const $listItem = document.createElement('DIV');
+          $listItem.innerHTML = film.title + ' (' + film.vote_average.toFixed(1) + ')';
+          const $listItemInputValue = document.createElement('input');
+          $listItemInputValue.type = 'hidden';
+          $listItemInputValue.value = film.title + ' (' + film.vote_average.toFixed(1) + ')';
+          $listItem.addEventListener('click', function () {
+            $filmsListInput.value = this.getElementsByTagName('input')[0].value;
             closeAllLists();
           });
-          filmList.appendChild(listItem);
+          $filmList.appendChild($listItem);
+          $listItem.appendChild($listItemInputValue);
         });
-      } else if (radioPosters.checked) {
-        filmList.classList.add('autocomplete-posters');
+      } else if ($radioPosters.checked) {
+        $filmList.classList.add('autocompletePosters');
         for (let i = 0; i < 3; i++) {
-          const imageDiv = document.createElement('DIV');
-          const image = document.createElement('IMG');
+          const $imageDiv = document.createElement('DIV');
+          const $image = document.createElement('IMG');
           if (resultFunc[i].poster_path) {
-            image.setAttribute('src', 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2' + resultFunc[i].poster_path);
+            $image.setAttribute('src', IMAGE_PATH + resultFunc[i].poster_path);
           } else {
-            image.setAttribute('src', 'https://media.istockphoto.com/vectors/internet-error-page-not-found-in-vertical-orientation-for-mobile-a-vector-id1252582562?s=612x612');
+            $image.setAttribute('src', NOT_FOUND_IMAGE_PATH);
           }
 
-          image.setAttribute('class', 'poster-style');
-          filmList.appendChild(imageDiv);
-          imageDiv.appendChild(image);
+          $image.setAttribute('class', 'posterStyle');
+          $filmList.appendChild($imageDiv);
+          $imageDiv.appendChild($image);
 
-          const filmTitle = document.createElement('H4');
-          filmTitle.innerHTML = resultFunc[i].title;
-          imageDiv.appendChild(filmTitle);
+          const $filmTitle = document.createElement('H4');
+          $filmTitle.innerHTML = resultFunc[i].title;
+          $imageDiv.appendChild($filmTitle);
 
-          const filmYear = document.createElement('P');
+          const $filmYear = document.createElement('P');
           if (resultFunc[i].release_date) {
-            filmYear.innerHTML = resultFunc[i].release_date.slice(0, 4);
+            $filmYear.innerHTML = resultFunc[i].release_date.slice(0, 4);
           } else {
-            filmYear.innerHTML = 'unknown';
+            $filmYear.innerHTML = 'unknown';
           }
-          imageDiv.appendChild(filmYear);
+          $imageDiv.appendChild($filmYear);
         }
       }
     } else {
-      filmList.innerHTML = 'No results';
+      $filmList.innerHTML = 'No results';
     }
   };
 
   function ajax() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.themoviedb.org/3/search/movie?api_key=' + apiKey + '&query=' + val.value, true);
+    xhr.open('GET', API_ENDPOINT + API_KEY + '&query=' + $filmsListInput.value, true);
     xhr.onload = function () {
-      if (xhr.status === 200) {
+      if (xhr.status === 200 && xhr.readyState === 4) {
         resultFunc = JSON.parse(xhr.responseText).results;
         autocomplete();
       } else {
-        console.log('Unable to load data');
+        $filmsAutocompleteList.innerHTML = 'Unable to load data';
+        $filmsAutocompleteList.style.display = 'block';
       }
     };
 
@@ -104,16 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function reqDelay() {
     clearTimeout(typingTimer);
-    if (val.value) {
+    if ($filmsListInput.value) {
       typingTimer = setTimeout(ajax, 500);
     }
   }
 
-  val.addEventListener('input', reqDelay);
+  $filmsListInput.addEventListener('input', reqDelay);
 
   function removeActive(x) {
     for (let i = 0; i < x.length; i++) {
-      x[i].classList.remove('autocomplete-active');
+      x[i].classList.remove('autocompleteActive');
     }
   }
 
@@ -122,28 +131,28 @@ document.addEventListener('DOMContentLoaded', function () {
     removeActive(x);
     if (currentFocus >= x.length) currentFocus = 0;
     if (currentFocus < 0) currentFocus = (x.length - 1);
-    x[currentFocus].classList.add('autocomplete-active');
+    x[currentFocus].classList.add('autocompleteActive');
   }
 
-  val.addEventListener('keydown', function (e) {
-    let x = document.getElementById('autocomplete-list');
-    if (x) x = x.getElementsByTagName('div');
+  $filmsListInput.addEventListener('keydown', function (e) {
+    let $x = document.getElementById('autocompleteList');
+    if ($x) $x = $x.getElementsByTagName('div');
     if (e.keyCode === 40) { //down
       currentFocus++;
-      addActive(x);
+      addActive($x);
     } else if (e.keyCode === 38) { //up
       currentFocus--;
-      addActive(x);
+      addActive($x);
     } else if (e.keyCode === 13) { //enter
       e.preventDefault();
       if (currentFocus > -1) {
-        if (x) x[currentFocus].click();
+        if ($x) $x[currentFocus].click();
       }
     }
   });
 
   document.addEventListener('click', function (e) {
     closeAllLists(e.target);
-    parentDiv.style.display = 'none';
+    $filmsAutocompleteList.style.display = 'none';
   });
 });

@@ -10,23 +10,23 @@
   </head>
   <body>
     <div class="container">
-      <div class="container_input">
+      <div class="container__input">
         <span class="iconify" data-icon="gg:search" data-inline="false"></span>
         <input id="filmsListInput" class="queryInput" name="query" placeholder="start typing...">
-        <div class="radio_div">
+        <div class="radioDiv">
           <div>
-            <label for="List">List</label>
+            <label for="radioList">List</label>
             <input id="radioList" type="radio" name="type" value="List">
           </div>
           <div>
-            <label for="Posters">Posters</label>
+            <label for="radioPosters">Posters</label>
             <input id="radioPosters" type="radio" name="type" value="Posters" checked>
           </div>
         </div>
-        <div id="parentDiv"></div>
+        <div id="filmsAutocompleteList" class="filmsAutocompleteListStyling"></div>
       </div>
     </div>
     </div>
-    <div class="image_container"><img src="logo.png" alt="logo"></div>
+    <div class="imageContainer"><img src="logo.png" alt="logo"></div>
   </body>
 </html>
