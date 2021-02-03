@@ -37,11 +37,12 @@ document.addEventListener('DOMContentLoaded', function () {
   function autocomplete() {
     const $radioList = document.getElementById('radioList');
     const $radioPosters = document.getElementById('radioPosters');
+    let count = 1;
     closeAllLists();
     if (!$filmsListInput.value) {
       return false;
     }
-    currentFocus = -1;
+    currentFocus = 0;
     $filmsAutocompleteList.style.display = 'block';
     const $filmList = document.createElement('DIV');
     $filmList.setAttribute('id', 'autocompleteList');
@@ -51,6 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if ($radioList.checked) {
         resultFunc.map(function (film) {
           const $listItem = document.createElement('DIV');
+          $listItem.setAttribute('id', 'listItem' + count);
+          count++;
           $listItem.innerHTML = film.title + ' (' + film.vote_average.toFixed(1) + ')';
           const $listItemInputValue = document.createElement('input');
           $listItemInputValue.type = 'hidden';
@@ -120,33 +123,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
   $filmsListInput.addEventListener('input', reqDelay);
 
-  function removeActive(x) {
-    for (let i = 0; i < x.length; i++) {
-      x[i].classList.remove('autocompleteActive');
-    }
-  }
-
-  function addActive(x) {
-    if (!x) return false;
-    removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    x[currentFocus].classList.add('autocompleteActive');
-  }
-
   $filmsListInput.addEventListener('keydown', function (e) {
-    let $x = document.getElementById('autocompleteList');
-    if ($x) $x = $x.getElementsByTagName('div');
+    let $autoCompleteList = document.getElementById('autocompleteList');
+    if ($autoCompleteList) $autoCompleteList = $autoCompleteList.getElementsByTagName('div');
+    const filmListItem = (a) => document.getElementById('listItem' + a);
+
+    function addActive(list) {
+      if (!list) return false;
+      for (let i = 0; i < $autoCompleteList.length; i++) {
+        $autoCompleteList[i].classList.remove('autocomplete-active');
+      }
+      list.classList.add('autocomplete-active');
+    }
+
     if (e.keyCode === 40) { //down
-      currentFocus++;
-      addActive($x);
+      if (currentFocus < resultFunc.length) {
+        currentFocus++;
+        filmListItem(currentFocus).scrollIntoView();
+        addActive(filmListItem(currentFocus));
+      } else {
+        currentFocus = 0;
+      };
     } else if (e.keyCode === 38) { //up
-      currentFocus--;
-      addActive($x);
+      if (currentFocus > 1) {
+        currentFocus--;
+        filmListItem(currentFocus).scrollIntoView();
+        addActive(filmListItem(currentFocus));
+      };
     } else if (e.keyCode === 13) { //enter
       e.preventDefault();
-      if (currentFocus > -1) {
-        if ($x) $x[currentFocus].click();
+      if (currentFocus > 0) {
+        if ($autoCompleteList) $autoCompleteList[currentFocus - 1].click();
       }
     }
   });
