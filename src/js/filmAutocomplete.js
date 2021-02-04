@@ -69,6 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
         $filmList.classList.add('autocompletePosters');
         for (let i = 0; i < 3; i++) {
           const $imageDiv = document.createElement('DIV');
+          $imageDiv.setAttribute('id', 'listItem' + count);
+          count++;
+          const $listItemInputValue = document.createElement('input');
+          $listItemInputValue.type = 'hidden';
+          $listItemInputValue.value = resultFunc[i].title + ' (' + resultFunc[i].vote_average.toFixed(1) + ')';
           const $image = document.createElement('IMG');
           if (resultFunc[i].poster_path) {
             $image.setAttribute('src', IMAGE_PATH + resultFunc[i].poster_path);
@@ -77,6 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
           }
 
           $image.setAttribute('class', 'posterStyle');
+          $imageDiv.addEventListener('click', function () {
+            $filmsListInput.value = this.getElementsByTagName('input')[0].value;
+            closeAllLists();
+          });
           $filmList.appendChild($imageDiv);
           $imageDiv.appendChild($image);
 
@@ -137,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (e.keyCode === 40) { //down
-      if (currentFocus < resultFunc.length) {
+      if (currentFocus < $autoCompleteList.length) {
         currentFocus++;
         filmListItem(currentFocus).scrollIntoView();
         addActive(filmListItem(currentFocus));
