@@ -22,11 +22,11 @@ const IMAGE_PATH = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
 const NOT_FOUND_IMAGE_PATH = 'https://media.istockphoto.com/vectors/internet-error-page-not-found-in-vertical-orientation-for-mobile-a-vector-id1252582562?s=612x612';
 
 document.addEventListener('DOMContentLoaded', function () {
-  const $filmsListInput = document.getElementById('filmsListInput');
-  const $filmsAutocompleteList = document.getElementById('filmsAutocompleteList');
+  const $filmsListInput = document.getElementById('films-list-input');
+  const $filmsAutocompleteList = document.getElementById('filmsAutocomplete-list');
 
   function closeAllLists(elmnt) {
-    const $x = document.getElementsByClassName('autocompleteItems');
+    const $x = document.getElementsByClassName('autocomplete-items');
     for (let i = 0; i < $x.length; i++) {
       if (elmnt !== $x[i] && elmnt !== $filmsListInput) {
         $x[i].parentNode.removeChild($x[i]);
@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function autocomplete() {
-    const $radioList = document.getElementById('radioList');
-    const $radioPosters = document.getElementById('radioPosters');
+    const $radioList = document.getElementById('radio-list');
+    const $radioPosters = document.getElementById('radio-posters');
     let count = 1;
     closeAllLists();
     if (!$filmsListInput.value) {
@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', function () {
     currentFocus = 0;
     $filmsAutocompleteList.style.display = 'block';
     const $filmList = document.createElement('DIV');
-    $filmList.setAttribute('id', 'autocompleteList');
-    $filmList.setAttribute('class', 'autocompleteItems');
+    $filmList.setAttribute('id', 'autocomplete-list');
+    $filmList.setAttribute('class', 'autocomplete-items');
     $filmsAutocompleteList.appendChild($filmList);
     if (resultFunc.length > 0) {
       if ($radioList.checked) {
         resultFunc.map(function (film) {
           const $listItem = document.createElement('DIV');
-          $listItem.setAttribute('id', 'listItem' + count);
+          $listItem.setAttribute('id', 'list-item' + count);
           count++;
           $listItem.innerHTML = film.title + ' (' + film.vote_average.toFixed(1) + ')';
           const $listItemInputValue = document.createElement('input');
@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function () {
           $listItem.appendChild($listItemInputValue);
         });
       } else if ($radioPosters.checked) {
-        $filmList.classList.add('autocompletePosters');
+        $filmList.classList.add('autocomplete-posters');
         for (let i = 0; i < 3; i++) {
           const $imageDiv = document.createElement('DIV');
-          $imageDiv.setAttribute('id', 'listItem' + count);
+          $imageDiv.setAttribute('id', 'list-item' + count);
           count++;
           const $listItemInputValue = document.createElement('input');
           $listItemInputValue.type = 'hidden';
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $image.setAttribute('src', NOT_FOUND_IMAGE_PATH);
           }
 
-          $image.setAttribute('class', 'posterStyle');
+          $image.setAttribute('class', 'poster-style');
           $imageDiv.addEventListener('click', function () {
             $filmsListInput.value = this.getElementsByTagName('input')[0].value;
             closeAllLists();
@@ -133,9 +133,9 @@ document.addEventListener('DOMContentLoaded', function () {
   $filmsListInput.addEventListener('input', reqDelay);
 
   $filmsListInput.addEventListener('keydown', function (e) {
-    let $autoCompleteList = document.getElementById('autocompleteList');
+    let $autoCompleteList = document.getElementById('autocomplete-list');
     if ($autoCompleteList) $autoCompleteList = $autoCompleteList.getElementsByTagName('div');
-    const filmListItem = (a) => document.getElementById('listItem' + a);
+    const filmListItem = (a) => document.getElementById('list-item' + a);
 
     function addActive(list) {
       if (!list) return false;

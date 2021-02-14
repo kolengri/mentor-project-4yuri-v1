@@ -11,7 +11,7 @@ body {
   height: fit-content;
 }
 
-.radioDiv {
+.radio-div {
   color: #e5e5e5;
   display: flex;
   flex-direction: column;
@@ -22,12 +22,12 @@ body {
   padding-right: 50px;
 }
 
-.autocompleteActive {
+.autocomplete-active {
   background-color: #626269;
   color: #e5e5e5;
 }
 
-.autocompleteItems {
+.autocomplete-items {
   text-align: left;
   overflow: auto;
   font-size: 1.5rem;
@@ -45,7 +45,7 @@ body {
   }
 }
 
-.autocompletePosters {
+.autocomplete-posters {
   text-align: center;
   max-height: fit-content;
   max-width: fit-content;
@@ -53,23 +53,23 @@ body {
   justify-content: center;
 }
 
-.autocompleteItems div {
+.autocomplete-items div {
   padding: 15px;
   margin: 0 20px;
 }
 
-.autocompletePosters div {
+.autocomplete-posters div {
   margin: 0;
   padding: 0 15px;
   max-width: fit-content;
 }
 
-.autocompletePosters h4 {
+.autocomplete-posters h4 {
   margin: 15px auto 10px;
   font-size: 1.5rem;
 }
 
-.autocompletePosters p {
+.autocomplete-posters p {
   margin: 0;
   font-size: 1rem;
   font-weight: 200;
@@ -82,7 +82,7 @@ body {
   width: fit-content;
 }
 
-.filmsAutocompleteListStyling {
+.films-autocomplete-list-styling {
   display: none;
   margin: -20px auto 0;
   padding: 30px;
@@ -91,7 +91,7 @@ body {
   color: #434348;
 }
 
-.queryInput {
+.query-input {
   width: 650px;
   padding: 30px 180px 30px 125px;
   padding-left: 125px;
@@ -120,13 +120,13 @@ body {
   color: #333337;
 }
 
-.imageContainer {
+.image-container {
   text-align: center;
   width: 100%;
   margin-top: 100px;
 }
 
-.posterStyle {
+.poster-style {
   width: 220px;
   margin: 0 10px;
 }
