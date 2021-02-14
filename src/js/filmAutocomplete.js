@@ -24,6 +24,8 @@ const NOT_FOUND_IMAGE_PATH = 'https://media.istockphoto.com/vectors/internet-err
 document.addEventListener('DOMContentLoaded', function () {
   const $filmsListInput = document.getElementById('films-list-input');
   const $filmsAutocompleteList = document.getElementById('filmsAutocomplete-list');
+  const $modal = document.getElementById('modal');
+  const $overlay = document.getElementById('overlay');
 
   function closeAllLists(elmnt) {
     const $x = document.getElementsByClassName('autocomplete-items');
@@ -43,55 +45,41 @@ document.addEventListener('DOMContentLoaded', function () {
       return false;
     }
     currentFocus = 0;
-    $filmsAutocompleteList.style.display = 'block';
+    $parentDiv.style.display = 'block';
     const $filmList = document.createElement('DIV');
     $filmList.setAttribute('id', 'autocomplete-list');
     $filmList.setAttribute('class', 'autocomplete-items');
-    $filmsAutocompleteList.appendChild($filmList);
+    $parentDiv.appendChild($filmList);
     if (resultFunc.length > 0) {
-      if ($radioList.checked) {
-        resultFunc.map(function (film) {
-          const $listItem = document.createElement('DIV');
-          $listItem.setAttribute('id', 'list-item' + count);
-          count++;
-          $listItem.innerHTML = film.title + ' (' + film.vote_average.toFixed(1) + ')';
-          const $listItemInputValue = document.createElement('input');
-          $listItemInputValue.type = 'hidden';
-          $listItemInputValue.value = 'https://www.themoviedb.org/movie/' + film.id + '-' + film.title.replace(/[^a-zA-Z ]/g, '').replace(/ /g, '-').toLowerCase();
-          $listItem.addEventListener('click', function () {
-            document.location.href = this.getElementsByTagName('input')[0].value;
-            closeAllLists();
-          });
-          $filmList.appendChild($listItem);
-          $listItem.appendChild($listItemInputValue);
+      for (i = 0; i < resultFunc.length; i++) {
+        const $listItem = document.createElement('DIV');
+        $listItem.setAttribute('id', 'listItem' + count);
+        count++;
+        const $listItemInputValue = document.createElement('input');
+        $listItemInputValue.type = 'hidden';
+        $listItemInputValue.value = 'https://www.themoviedb.org/movie/' + resultFunc[i].id + '-' + resultFunc[i].title.replace(/[^a-zA-Z ]/g, '').replace(/ /g, '-').toLowerCase();
+        $listItem.addEventListener('click', function () {
+          $filmsListInput.value = this.textContent;
+          document.location.href = this.getElementsByTagName('input')[0].value;
+          closeAllLists();
         });
-      } else if ($radioPosters.checked) {
-        $filmList.classList.add('autocomplete-posters');
-        for (let i = 0; i < 3; i++) {
-          const $imageDiv = document.createElement('DIV');
-          $imageDiv.setAttribute('id', 'list-item' + count);
-          count++;
-          const $listItemInputValue = document.createElement('input');
-          $listItemInputValue.type = 'hidden';
-          $listItemInputValue.value = 'https://www.themoviedb.org/movie/' + resultFunc[i].id + '-' + resultFunc[i].title.replace(/[^a-zA-Z ]/g, '').replace(/ /g, '-').toLowerCase();
+        if ($radioList.checked) {
+          $listItem.innerHTML = resultFunc[i].title + ' (' + resultFunc[i].vote_average.toFixed(1) + ')';
+        } else if ($radioPosters.checked) {
+          $filmList.classList.add('autocomplete-posters');
+          if (i > 2) break;
           const $image = document.createElement('IMG');
           if (resultFunc[i].poster_path) {
             $image.setAttribute('src', IMAGE_PATH + resultFunc[i].poster_path);
           } else {
             $image.setAttribute('src', NOT_FOUND_IMAGE_PATH);
           }
-
           $image.setAttribute('class', 'poster-style');
-          $imageDiv.addEventListener('click', function () {
-            document.location.href = this.getElementsByTagName('input')[0].value;
-            closeAllLists();
-          });
-          $filmList.appendChild($imageDiv);
-          $imageDiv.appendChild($image);
+          $listItem.appendChild($image);
 
           const $filmTitle = document.createElement('H4');
-          $filmTitle.innerHTML = resultFunc[i].title;
-          $imageDiv.appendChild($filmTitle);
+          $filmTitle.innerHTML = resultFunc[i].title + ' ';
+          $listItem.appendChild($filmTitle);
 
           const $filmYear = document.createElement('P');
           if (resultFunc[i].release_date) {
@@ -99,8 +87,10 @@ document.addEventListener('DOMContentLoaded', function () {
           } else {
             $filmYear.innerHTML = 'unknown';
           }
-          $imageDiv.appendChild($filmYear);
+          $listItem.appendChild($filmYear);
         }
+        $filmList.appendChild($listItem);
+        $listItem.appendChild($listItemInputValue);
       }
     } else {
       $filmList.innerHTML = 'No results';
@@ -171,4 +161,24 @@ document.addEventListener('DOMContentLoaded', function () {
     closeAllLists(e.target);
     $filmsAutocompleteList.style.display = 'none';
   });
+
+  setTimeout(
+    function () {
+      $modal.style.display = 'block';
+      $overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }, 800,
+  );
+});
+
+function hide() {
+  document.getElementById('modal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+document.addEventListener('keyup', function (e) {
+  if (e.keyCode === 27) {
+    hide();
+  }
 });
