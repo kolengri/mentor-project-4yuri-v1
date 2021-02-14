@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
           $listItem.innerHTML = film.title + ' (' + film.vote_average.toFixed(1) + ')';
           const $listItemInputValue = document.createElement('input');
           $listItemInputValue.type = 'hidden';
-          $listItemInputValue.value = film.title + ' (' + film.vote_average.toFixed(1) + ')';
+          $listItemInputValue.value = 'https://www.themoviedb.org/movie/' + film.id + '-' + film.title.replace(/[^a-zA-Z ]/g, '').replace(/ /g, '-').toLowerCase();
           $listItem.addEventListener('click', function () {
-            $filmsListInput.value = this.getElementsByTagName('input')[0].value;
+            document.location.href = this.getElementsByTagName('input')[0].value;
             closeAllLists();
           });
           $filmList.appendChild($listItem);
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
           count++;
           const $listItemInputValue = document.createElement('input');
           $listItemInputValue.type = 'hidden';
-          $listItemInputValue.value = resultFunc[i].title + ' (' + resultFunc[i].vote_average.toFixed(1) + ')';
+          $listItemInputValue.value = 'https://www.themoviedb.org/movie/' + resultFunc[i].id + '-' + resultFunc[i].title.replace(/[^a-zA-Z ]/g, '').replace(/ /g, '-').toLowerCase();
           const $image = document.createElement('IMG');
           if (resultFunc[i].poster_path) {
             $image.setAttribute('src', IMAGE_PATH + resultFunc[i].poster_path);
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           $image.setAttribute('class', 'poster-style');
           $imageDiv.addEventListener('click', function () {
-            $filmsListInput.value = this.getElementsByTagName('input')[0].value;
+            document.location.href = this.getElementsByTagName('input')[0].value;
             closeAllLists();
           });
           $filmList.appendChild($imageDiv);
