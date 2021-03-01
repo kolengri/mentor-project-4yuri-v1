@@ -23,7 +23,7 @@ const NOT_FOUND_IMAGE_PATH = 'https://media.istockphoto.com/vectors/internet-err
 
 document.addEventListener('DOMContentLoaded', function () {
   const $filmsListInput = document.getElementById('films-list-input');
-  const $filmsAutocompleteList = document.getElementById('filmsAutocomplete-list');
+  const $filmsAutocompleteList = document.getElementById('films-autocomplete-list');
   const $modal = document.getElementById('modal');
   const $overlay = document.getElementById('overlay');
 
